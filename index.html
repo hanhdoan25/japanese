@@ -172,7 +172,7 @@
       document.querySelectorAll('button.k').forEach(btn => {
         btn.addEventListener('click', () => {
           const kana = btn.dataset.kana;
-          const src = `images/kanji_${kana}_stroke_order_animation.gif`;
+          const src = `images/hiragana_${kana}_stroke_order.gif`;
           statusEl.textContent = `Đang tải: ${src}`;
           img.hidden = true;
           img.src = src;
