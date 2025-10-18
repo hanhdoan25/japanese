@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hiragana Stroke‑Order GIF Gallery</title>
+  <style>
+    :root {
+      --maxw: 1200px;
+      --gap: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      margin: 0; padding: 24px; display: grid; place-items: start center; background: #fafafa; color: #111;
+    }
+    main { width: min(100%, var(--maxw)); }
+    h1 { margin: 0 0 12px; font-size: clamp(22px, 3vw, 32px); }
+    p.lead { margin: 0 0 20px; opacity: .8; }
+    section { margin: 26px 0; }
+    h2 { margin: 18px 0 10px; font-size: clamp(18px, 2.4vw, 24px); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: var(--gap);
+    }
+    figure {
+      margin: 0; padding: 10px; background: white; border: 1px solid #eee; border-radius: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.04);
+      display: grid; gap: 8px; place-items: center; text-align: center;
+    }
+    figure img { width: 100%; height: auto; display: block; image-rendering: -webkit-optimize-contrast; }
+    figcaption { font-size: 12px; opacity: .85; }
+    .kana { font-size: 22px; font-weight: 600; letter-spacing: .5px; }
+    .romaji { font-feature-settings: "tnum" 1; }
+    .note { font-size: 12px; opacity: .7; }
+    .muted { opacity: .5; }
+    .footer { margin: 24px 0 8px; font-size: 12px; opacity: .7; }
+    code { background: #f2f2f2; padding: 1px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Bảng chữ cái Hiragana</h1>
+    <p class="lead">Bấm vào một nút bên trái để xem ảnh động thứ tự nét ở khung bên phải. Tên file cần theo dạng <code>kanji_<em>かな</em>_stroke_order_animation.gif</code> và đặt trong thư mục <code>image/</code> (cùng cấp với file này).</p>
+
+    <section class="layout">
+      <!-- Cột 1: 46 nút (tỉ lệ 2) -->
+      <div class="left">
+        <h2>Chọn chữ (46 chữ cơ bản)</h2>
+        <div class="rows" aria-label="Gojūon rows">
+          <!-- a row -->
+          <div class="row"><strong class="rlabel">a</strong>
+            <button class="k" data-kana="あ">あ</button>
+            <button class="k" data-kana="い">い</button>
+            <button class="k" data-kana="う">う</button>
+            <button class="k" data-kana="え">え</button>
+            <button class="k" data-kana="お">お</button>
+          </div>
+          <!-- ka row -->
+          <div class="row"><strong class="rlabel">ka</strong>
+            <button class="k" data-kana="か">か</button>
+            <button class="k" data-kana="き">き</button>
+            <button class="k" data-kana="く">く</button>
+            <button class="k" data-kana="け">け</button>
+            <button class="k" data-kana="こ">こ</button>
+          </div>
+          <!-- sa row -->
+          <div class="row"><strong class="rlabel">sa</strong>
+            <button class="k" data-kana="さ">さ</button>
+            <button class="k" data-kana="し">し</button>
+            <button class="k" data-kana="す">す</button>
+            <button class="k" data-kana="せ">せ</button>
+            <button class="k" data-kana="そ">そ</button>
+          </div>
+          <!-- ta row -->
+          <div class="row"><strong class="rlabel">ta</strong>
+            <button class="k" data-kana="た">た</button>
+            <button class="k" data-kana="ち">ち</button>
+            <button class="k" data-kana="つ">つ</button>
+            <button class="k" data-kana="て">て</button>
+            <button class="k" data-kana="と">と</button>
+          </div>
+          <!-- na row -->
+          <div class="row"><strong class="rlabel">na</strong>
+            <button class="k" data-kana="な">な</button>
+            <button class="k" data-kana="に">に</button>
+            <button class="k" data-kana="ぬ">ぬ</button>
+            <button class="k" data-kana="ね">ね</button>
+            <button class="k" data-kana="の">の</button>
+          </div>
+          <!-- ha row -->
+          <div class="row"><strong class="rlabel">ha</strong>
+            <button class="k" data-kana="は">は</button>
+            <button class="k" data-kana="ひ">ひ</button>
+            <button class="k" data-kana="ふ">ふ</button>
+            <button class="k" data-kana="へ">へ</button>
+            <button class="k" data-kana="ほ">ほ</button>
+          </div>
+          <!-- ma row -->
+          <div class="row"><strong class="rlabel">ma</strong>
+            <button class="k" data-kana="ま">ま</button>
+            <button class="k" data-kana="み">み</button>
+            <button class="k" data-kana="む">む</button>
+            <button class="k" data-kana="め">め</button>
+            <button class="k" data-kana="も">も</button>
+          </div>
+          <!-- ya row -->
+          <div class="row"><strong class="rlabel">ya</strong>
+            <button class="k" data-kana="や">や</button>
+            <span class="spacer"></span>
+            <button class="k" data-kana="ゆ">ゆ</button>
+            <span class="spacer"></span>
+            <button class="k" data-kana="よ">よ</button>
+          </div>
+          <!-- ra row -->
+          <div class="row"><strong class="rlabel">ra</strong>
+            <button class="k" data-kana="ら">ら</button>
+            <button class="k" data-kana="り">り</button>
+            <button class="k" data-kana="る">る</button>
+            <button class="k" data-kana="れ">れ</button>
+            <button class="k" data-kana="ろ">ろ</button>
+          </div>
+          <!-- wa row -->
+          <div class="row"><strong class="rlabel">wa</strong>
+            <button class="k" data-kana="わ">わ</button>
+            <span class="spacer"></span>
+            <span class="spacer"></span>
+            <span class="spacer"></span>
+            <button class="k" data-kana="を">を</button>
+          </div>
+          <!-- n row -->
+          <div class="row"><strong class="rlabel">n</strong>
+            <button class="k" data-kana="ん">ん</button>
+          </div>
+
+          <div class="controls">
+            <button id="clearBtn" class="clear">Clear</button>
+            <span id="status" class="status" aria-live="polite"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cột 2: Viewer (tỉ lệ 1) -->
+      <div class="right">
+        <h2>Hiển thị</h2>
+        <div id="viewer" class="viewer" aria-live="polite">
+          <img id="kanaImg" alt="" hidden loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <p class="footer">Nếu ảnh không hiện, hãy kiểm tra lại tên file và việc đặt file trong thư mục <code>image/</code> (cùng cấp với trang này).</p>
+
+    <style>
+      .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+      @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+      .rows { display: grid; gap: 10px; }
+      .row { display: grid; grid-template-columns: 60px repeat(5, minmax(48px, 1fr)); align-items: center; gap: 8px; }
+      .rlabel { opacity: .7; font-size: 12px; text-transform: uppercase; }
+      button.k, .clear { appearance: none; border: 1px solid #e7e7e7; background: #fff; padding: 10px 12px; border-radius: 12px; cursor: pointer; font-size: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+      button.k:hover, .clear:hover { background: #f6f6f6; }
+      .spacer { height: 1px; }
+      .controls { margin: 14px 0 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+      .status { font-size: 12px; opacity: .75; }
+      .viewer { display: grid; place-items: center; min-height: 320px; padding: 16px; background: #fff; border: 1px solid #eee; border-radius: 16px; }
+      #kanaImg { max-width: 100%; height: auto; }
+    </style>
+
+    <script>
+      const img = document.getElementById('kanaImg');
+      const statusEl = document.getElementById('status');
+      document.querySelectorAll('button.k').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const kana = btn.dataset.kana;
+          const src = `images/kanji_${kana}_stroke_order_animation.gif`;
+          statusEl.textContent = `Đang tải: ${src}`;
+          img.hidden = true;
+          img.src = src;
+          img.alt = `${kana} stroke order`;
+        });
+      });
+      img.addEventListener('load', () => {
+        img.hidden = false;
+        statusEl.textContent = `Đã tải: ${img.src.split('/').pop()}`;
+      });
+      img.addEventListener('error', () => {
+        statusEl.textContent = 'Không tìm thấy file ảnh. Kiểm tra lại tên và vị trí file.';
+        img.hidden = true;
+      });
+      document.getElementById('clearBtn').addEventListener('click', () => {
+        img.hidden = true; img.removeAttribute('src'); img.alt=''; statusEl.textContent = 'Đã clear.';
+      });
+    </script>
+  </main>
+</body>
+</html>
