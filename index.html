@@ -198,14 +198,14 @@
       const src = `images/hiragana_${r}.gif`;
 
       statusEl.textContent = `Đang tải: ${src}`;
-      img.setAttribute('hidden','');
+      //img.setAttribute('hidden','');
 
       img.onload = () => {
-        img.removeAttribute('hidden');
+        //img.removeAttribute('hidden');
         statusEl.textContent = `Đã tải: hiragana_${r}.gif`;
       };
       img.onerror = () => {
-        img.setAttribute('hidden','');
+        //img.setAttribute('hidden','');
         statusEl.textContent = `Không tìm thấy ${src}`;
       };
 
