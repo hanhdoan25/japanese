@@ -144,9 +144,15 @@
       <!-- Cột 2: Viewer (tỉ lệ 1) -->
       <div class="right">
         <h2>Hiển thị</h2>
+        <div id="viewer" class="viewer">
+  <img id="kanaImg" alt="" hidden>
+</div>
+
+        <!--
         <div id="viewer" class="viewer" aria-live="polite">
           <img id="kanaImg" alt="" hidden loading="lazy">
         </div>
+        -->
       </div>
     </section>
 
@@ -168,31 +174,45 @@
     </style>
 
     <script>
-      const img = document.getElementById('kanaImg');
-      const statusEl = document.getElementById('status');
-      document.querySelectorAll('button.k').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const kana = btn.dataset.kana;
-          const src = `images/hiragana.gif`; 
-                             
-          statusEl.textContent = `Đang tải: ${src}`;
-          img.hidden = true;
-          img.src = src;
-          img.alt = `${kana} stroke order`;
-        });
-      });
-      img.addEventListener('load', () => {
-        img.hidden = false;
-        statusEl.textContent = `Đã tải: ${img.src.split('/').pop()}`;
-      });
-      img.addEventListener('error', () => {
-        statusEl.textContent = 'Không tìm thấy file ảnh. Kiểm tra lại tên và vị trí file.';
-        img.hidden = true;
-      });
-      document.getElementById('clearBtn').addEventListener('click', () => {
-        img.hidden = true; img.removeAttribute('src'); img.alt=''; statusEl.textContent = 'Đã clear.';
-      });
-    </script>
+  const img = document.getElementById('kanaImg');
+  const statusEl = document.getElementById('status');
+
+  function loadTest() {
+    const src = 'images/hiragana.gif';
+    statusEl.textContent = 'Đang tải: ' + src;
+    // luôn ẩn trước khi đổi src
+    img.setAttribute('hidden', '');
+
+    img.onload = () => {
+      img.removeAttribute('hidden'); // hiện trở lại
+      statusEl.textContent = 'Đã tải: ' + src;
+    };
+    img.onerror = () => {
+      img.setAttribute('hidden', '');
+      statusEl.textContent = 'Không tìm thấy images/hiragana.gif (404).';
+    };
+
+    // ép trình duyệt lấy bản mới (tránh cache)
+    img.src = src + '?t=' + Date.now();
+    img.alt = 'hiragana test';
+  }
+
+  // gán click cho tất cả nút kana
+  document.querySelectorAll('button.k').forEach(btn => {
+    btn.onclick = loadTest;
+  });
+
+  // nút Clear
+  document.getElementById('clearBtn').onclick = () => {
+    img.setAttribute('hidden', '');
+    img.removeAttribute('src');
+    img.alt = '';
+    statusEl.textContent = 'Đã clear.';
+  };
+</script>
+
+    
+    
   </main>
 </body>
 </html>
