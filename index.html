@@ -41,7 +41,8 @@
 <body>
   <main>
     <h1>Bảng chữ cái Hiragana</h1>
-    <p class="lead">Bấm vào một nút bên trái để xem ảnh động thứ tự nét ở khung bên phải. <strong>Định dạng tên file dùng romaji</strong>: <code>images/hiragana_<em>romaji</em>.gif</code> (ví dụ: <code>images/hiragana_a.gif</code>, <code>images/hiragana_ka.gif</code>). Tất cả ảnh đặt trong thư mục <code>images/</code> (cùng cấp với file này).</p>
+    <p class="lead">Bấm vào một nút bên trái để xem ảnh động thứ tự nét ở khung bên phải. 
+      <strong>Định dạng tên file dùng romaji</strong></p>
 
     <section class="layout">
       <!-- Cột 1: 46 nút (tỉ lệ 2) -->
@@ -159,6 +160,12 @@
       .rlabel { opacity: .7; font-size: 12px; text-transform: uppercase; }
       button.k, .clear { appearance: none; border: 1px solid #e7e7e7; background: #fff; padding: 10px 12px; border-radius: 12px; cursor: pointer; font-size: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
       button.k:hover, .clear:hover { background: #f6f6f6; }
+      /* Nút đang chọn */
+      button.k.active {
+        background: #e8f0fe;
+        border-color: #c6dafc;
+        box-shadow: 0 0 0 2px rgba(66,133,244,.15);
+      }
       .spacer { height: 1px; }
       .controls { margin: 14px 0 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
       .status { font-size: 12px; opacity: .75; }
@@ -185,8 +192,7 @@
       }; // updated mapping for fallback format hiragana_<romaji>.gif
 
       function setImageForKana(kana){
-        const k = (kana || '').normalize('NFC');
-        const r = ROMAJI[k];
+        const r = ROMAJI[kana];
         if (!r) { statusEl.textContent = 'Không tìm thấy romaji cho ký tự này.'; return; }
         const src = `images/hiragana_${r}.gif`;
         statusEl.textContent = `Đang tải: ${src}`;
@@ -194,15 +200,18 @@
         img.onload = () => { img.hidden = false; statusEl.textContent = `Đã tải: hiragana_${r}.gif`; };
         img.onerror = () => { statusEl.textContent = `Không tìm thấy ${src}`; img.hidden = true; };
         img.src = src + '?t=' + Date.now();
-        img.alt = `${k} (${r}) stroke order`;
+        img.alt = `${r} (hiragana)`;
       }
 
-      document.querySelectorAll('button.k').forEach(btn => {
-        btn.addEventListener('click', () => setImageForKana(btn.dataset.kana));
-      });
-
-      document.getElementById('clearBtn').addEventListener('click', () => {
+      const clearHandler = () => {
         img.hidden = true; img.removeAttribute('src'); img.alt=''; statusEl.textContent = 'Đã clear.';
+        document.querySelectorAll('button.k.active').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+      };
+
+      document.getElementById('clearBtn'.addEventListener('click', () => {
+        img.hidden = true; img.removeAttribute('src'); img.alt=''; statusEl.textContent = 'Đã clear.';
+        // bỏ highlight nút đang chọn
+        document.querySelectorAll('button.k.active').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
       }); img.removeAttribute('src'); img.alt=''; statusEl.textContent = 'Đã clear.';
       }); img.removeAttribute('src'); img.alt=''; statusEl.textContent = 'Đã clear. (viewer dùng định dạng mới: images/hiragana_<kana>.gif)';
       });
