@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hiragana - Japanese Learning</title>
+  <title>Hiragana Stroke‑Order GIF Gallery</title>
   <style>
     :root {
       --maxw: 1200px;
@@ -41,7 +41,7 @@
 <body>
   <main>
     <h1>Bảng chữ cái Hiragana</h1>
-    <p class="lead">Bấm vào một nút bên trái để xem ảnh động thứ tự nét ở khung bên phải. </p>
+    <p class="lead">Bấm vào một nút bên trái để xem ảnh động thứ tự nét ở khung bên phải. Tên file cần theo dạng <code>kanji_<em>かな</em>_stroke_order_animation.gif</code> và đặt cùng thư mục với file này.</p>
 
     <section class="layout">
       <!-- Cột 1: 46 nút (tỉ lệ 2) -->
@@ -144,12 +144,12 @@
       <div class="right">
         <h2>Hiển thị</h2>
         <div id="viewer" class="viewer" aria-live="polite">
-          <img id="kanaImg" alt="" hidden loading="lazy">
+          <img id="kanaImg" alt="" hidden>
         </div>
       </div>
     </section>
 
-    <p class="footer">Nếu ảnh không hiện, hãy kiểm tra lại tên file và việc đặt file trong thư mục <code>images/</code> (cùng cấp với trang này).</p>
+    <p class="footer">Nếu ảnh không hiện, hãy kiểm tra lại tên file và việc đặt file cùng thư mục với trang này.</p>
 
     <style>
       .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
@@ -159,12 +159,6 @@
       .rlabel { opacity: .7; font-size: 12px; text-transform: uppercase; }
       button.k, .clear { appearance: none; border: 1px solid #e7e7e7; background: #fff; padding: 10px 12px; border-radius: 12px; cursor: pointer; font-size: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
       button.k:hover, .clear:hover { background: #f6f6f6; }
-      /* Nút đang chọn */
-      button.k.active {
-        background: #e8f0fe;
-        border-color: #c6dafc;
-        box-shadow: 0 0 0 2px rgba(66,133,244,.15);
-      }
       .spacer { height: 1px; }
       .controls { margin: 14px 0 8px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
       .status { font-size: 12px; opacity: .75; }
@@ -173,12 +167,9 @@
     </style>
 
     <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const img = document.getElementById('kanaImg');
-    const statusEl = document.getElementById('status');
-    const buttons = Array.from(document.querySelectorAll('button.k'));
-
-    // Map kana -> romaji
+      const img = document.getElementById('kanaImg');
+      const statusEl = document.getElementById('status');
+       // Map kana -> romaji
     const ROMAJI = {
       'あ':'a','い':'i','う':'u','え':'e','お':'o',
       'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
@@ -192,57 +183,30 @@
       'わ':'wa','を':'wo','ん':'n'
     };
 
-    function setImageForKana(kana){
-      const r = ROMAJI[kana];
-      if (!r) { statusEl.textContent = 'Không tìm thấy romaji cho ký tự này.'; return; }
-      const src = `images/hiragana_${r}.gif`;
-
-      statusEl.textContent = `Đang tải: ${src}`;
-      //img.setAttribute('hidden','');
-
-      img.onload = () => {
-        //img.removeAttribute('hidden');
-        statusEl.textContent = `Đã tải: hiragana_${r}.gif`;
-      };
-      img.onerror = () => {
-        //img.setAttribute('hidden','');
-        statusEl.textContent = `Không tìm thấy ${src}`;
-      };
-
-      img.src = src + '?t=' + Date.now();
-      img.alt = `${kana} (${r}) stroke order`;
-    }
-
-    // Gắn listener cho các nút
-    if (buttons.length === 0) {
-      statusEl.textContent = 'Không tìm thấy nút kana trong DOM.';
-    } else {
-      statusEl.textContent = `Đã sẵn sàng (${buttons.length} nút).`;
-      buttons.forEach(btn => {
+      document.querySelectorAll('button.k').forEach(btn => {
         btn.addEventListener('click', () => {
-          // highlight
-          buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-          btn.classList.add('active');
-          btn.setAttribute('aria-pressed','true');
-          // load image
-          setImageForKana(btn.dataset.kana);
+          const kana = btn.dataset.kana;
+          const r = ROMAJI[kana];
+          const src = `images/hiragana_${r}.gif`;
+          //const src = `kanji_${kana}_stroke_order_animation.gif`;
+          statusEl.textContent = `Đang tải: ${src}`;
+          img.hidden = true;
+          img.src = src;
+          img.alt = `${kana} stroke order`;
         });
       });
-    }
-
-    // Nút Clear
-    const clearBtn = document.getElementById('clearBtn');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        img.setAttribute('hidden','');
-        img.removeAttribute('src');
-        img.alt = '';
-        statusEl.textContent = 'Đã clear.';
-        document.querySelectorAll('button.k.active').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+      img.addEventListener('load', () => {
+        img.hidden = false;
+        statusEl.textContent = `Đã tải: ${img.src.split('/').pop()}`;
       });
-    }
-  });
-</script>
+      img.addEventListener('error', () => {
+        statusEl.textContent = 'Không tìm thấy file ảnh. Kiểm tra lại tên và vị trí file.';
+        img.hidden = true;
+      });
+      document.getElementById('clearBtn').addEventListener('click', () => {
+        img.hidden = true; img.removeAttribute('src'); img.alt=''; statusEl.textContent = 'Đã clear.';
+      });
+    </script>
   </main>
 </body>
 </html>
