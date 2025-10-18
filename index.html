@@ -149,8 +149,6 @@
       </div>
     </section>
 
-    <p class="footer">Nếu ảnh không hiện, hãy kiểm tra lại tên file và việc đặt file cùng thư mục với trang này.</p>
-
     <style>
       .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
       @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
@@ -188,8 +186,7 @@
           const kana = btn.dataset.kana;
           const r = ROMAJI[kana];
           const src = `images/hiragana_${r}.gif`;
-          //const src = `kanji_${kana}_stroke_order_animation.gif`;
-          statusEl.textContent = `Đang tải: ${src}`;
+          statusEl.textContent = `Loading: ${src}`;
           img.hidden = true;
           img.src = src;
           img.alt = `${kana} stroke order`;
@@ -197,7 +194,7 @@
       });
       img.addEventListener('load', () => {
         img.hidden = false;
-        statusEl.textContent = `Đã tải: ${img.src.split('/').pop()}`;
+        statusEl.textContent = `Loaded: ${img.src.split('/').pop()}`;
       });
       img.addEventListener('error', () => {
         statusEl.textContent = 'Không tìm thấy file ảnh. Kiểm tra lại tên và vị trí file.';
