@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hiragana Stroke‑Order GIF Gallery</title>
+  <title>Hiragana - Japanese Learning</title>
   <style>
     :root {
       --maxw: 1200px;
@@ -41,8 +41,7 @@
 <body>
   <main>
     <h1>Bảng chữ cái Hiragana</h1>
-    <p class="lead">Bấm vào một nút bên trái để xem ảnh động thứ tự nét ở khung bên phải. Tên file cần theo dạng
-      .</p>
+    <p class="lead">Bấm vào một nút bên trái để xem ảnh động thứ tự nét ở khung bên phải. Tên file cần theo dạng <code>hiragana_<em>かな</em>.gif</code> và đặt trong thư mục <code>images/</code> (cùng cấp với file này). Nếu dùng tên kana mà ảnh vẫn không tải được, nguyên nhân thường là khác biệt "Unicode normalization" giữa macOS và GitHub. Khi đó bạn có thể dùng tên romaji (a, i, u...) — trang đã có fallback tự động.</p>
 
     <section class="layout">
       <!-- Cột 1: 46 nút (tỉ lệ 2) -->
@@ -144,19 +143,13 @@
       <!-- Cột 2: Viewer (tỉ lệ 1) -->
       <div class="right">
         <h2>Hiển thị</h2>
-        <div id="viewer" class="viewer">
-  <img id="kanaImg" alt="" hidden>
-</div>
-
-        <!--
         <div id="viewer" class="viewer" aria-live="polite">
           <img id="kanaImg" alt="" hidden loading="lazy">
         </div>
-        -->
       </div>
     </section>
 
-    <p class="footer">Nếu ảnh không hiện, hãy kiểm tra lại tên file và việc đặt file trong thư mục <code>image/</code> (cùng cấp với trang này).</p>
+    <p class="footer">Nếu ảnh không hiện, hãy kiểm tra lại tên file và việc đặt file trong thư mục <code>images/</code> (cùng cấp với trang này).</p>
 
     <style>
       .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
@@ -174,45 +167,54 @@
     </style>
 
     <script>
-  const img = document.getElementById('kanaImg');
-  const statusEl = document.getElementById('status');
+      const img = document.getElementById('kanaImg');
+      const statusEl = document.getElementById('status');
 
-  function loadTest() {
-    const src = 'images/hiragana.gif';
-    statusEl.textContent = 'Đang tải: ' + src;
-    // luôn ẩn trước khi đổi src
-    img.setAttribute('hidden', '');
+      // Bản đồ romaji để fallback nếu tên file kana gặp lỗi Unicode normalization (NFC/NFD)
+      const ROMAJI = {
+        'あ':'a','い':'i','う':'u','え':'e','お':'o',
+        'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+        'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
+        'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+        'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
+        'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+        'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
+        'や':'ya','ゆ':'yu','よ':'yo',
+        'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
+        'わ':'wa','を':'wo','ん':'n'
+      }; // updated mapping for fallback format hiragana_<romaji>.gif
 
-    img.onload = () => {
-      img.removeAttribute('hidden'); // hiện trở lại
-      statusEl.textContent = 'Đã tải: ' + src;
-    };
-    img.onerror = () => {
-      img.setAttribute('hidden', '');
-      statusEl.textContent = 'Không tìm thấy images/hiragana.gif (404).';
-    };
+      function setImageForKana(kana){
+        const k = (kana || '').normalize('NFC'); // chuẩn hoá phòng lỗi NFD trên macOS
+        const primary = `images/hiragana_${encodeURI(k)}.gif`; // new format
+        const fallback = ROMAJI[k] ? `images/hiragana_${ROMAJI[k]}.gif` : null; // new fallback
 
-    // ép trình duyệt lấy bản mới (tránh cache)
-    img.src = src + '?t=' + Date.now();
-    img.alt = 'hiragana test';
-  }
+        statusEl.textContent = `Đang tải: ${decodeURI(primary)}`;
+        img.hidden = true;
+        img.onerror = null; // reset trước
+        img.onload = () => { img.hidden = false; statusEl.textContent = `Đã tải: ${decodeURI(img.src.split('/').pop())}`; };
+        img.onerror = () => {
+          if (fallback){
+            statusEl.textContent = `Không thấy file kana, thử: ${fallback}`;
+            img.onerror = () => { statusEl.textContent = 'Không tìm thấy ảnh (kana/romaji). Kiểm tra lại tên file trong thư mục images/.'; img.hidden = true; };
+            img.src = fallback;
+          } else {
+            statusEl.textContent = 'Không tìm thấy ảnh. Kiểm tra lại tên file trong thư mục images/.';
+            img.hidden = true;
+          }
+        };
+        img.src = primary;
+        img.alt = `${k} stroke order`;
+      }
 
-  // gán click cho tất cả nút kana
-  document.querySelectorAll('button.k').forEach(btn => {
-    btn.onclick = loadTest;
-  });
+      document.querySelectorAll('button.k').forEach(btn => {
+        btn.addEventListener('click', () => setImageForKana(btn.dataset.kana));
+      });
 
-  // nút Clear
-  document.getElementById('clearBtn').onclick = () => {
-    img.setAttribute('hidden', '');
-    img.removeAttribute('src');
-    img.alt = '';
-    statusEl.textContent = 'Đã clear.';
-  };
-</script>
-
-    
-    
+      document.getElementById('clearBtn').addEventListener('click', () => {
+        img.hidden = true; img.removeAttribute('src'); img.alt=''; statusEl.textContent = 'Đã clear. (viewer dùng định dạng mới: images/hiragana_<kana>.gif)';
+      });
+    </script>
   </main>
 </body>
 </html>
