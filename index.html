@@ -173,63 +173,74 @@
     </style>
 
     <script>
-  const img = document.getElementById('kanaImg');
-  const statusEl = document.getElementById('status');
+  window.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('kanaImg');
+    const statusEl = document.getElementById('status');
+    const buttons = Array.from(document.querySelectorAll('button.k'));
 
-  // Map kana -> romaji
-  const ROMAJI = {
-    'あ':'a','い':'i','う':'u','え':'e','お':'o',
-    'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
-    'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
-    'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
-    'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
-    'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
-    'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
-    'や':'ya','ゆ':'yu','よ':'yo',
-    'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
-    'わ':'wa','を':'wo','ん':'n'
-  };
-
-  function setImageForKana(kana){
-    const r = ROMAJI[kana];
-    if (!r) { statusEl.textContent = 'Không tìm thấy romaji cho ký tự này.'; return; }
-    const src = `images/hiragana_${r}.gif`;
-
-    statusEl.textContent = `Đang tải: ${src}`;
-    img.setAttribute('hidden','');
-
-    img.onload = () => {
-      img.removeAttribute('hidden');
-      statusEl.textContent = `Đã tải: hiragana_${r}.gif`;
+    // Map kana -> romaji
+    const ROMAJI = {
+      'あ':'a','い':'i','う':'u','え':'e','お':'o',
+      'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+      'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
+      'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+      'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
+      'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+      'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
+      'や':'ya','ゆ':'yu','よ':'yo',
+      'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
+      'わ':'wa','を':'wo','ん':'n'
     };
-    img.onerror = () => {
+
+    function setImageForKana(kana){
+      const r = ROMAJI[kana];
+      if (!r) { statusEl.textContent = 'Không tìm thấy romaji cho ký tự này.'; return; }
+      const src = `images/hiragana_${r}.gif`;
+
+      statusEl.textContent = `Đang tải: ${src}`;
       img.setAttribute('hidden','');
-      statusEl.textContent = `Không tìm thấy ${src}`;
-    };
 
-    // cache buster để chắc chắn lấy bản mới khi bạn vừa đổi file
-    img.src = src + '?t=' + Date.now();
-    img.alt = `${kana} (${r}) stroke order`;
-  }
+      img.onload = () => {
+        img.removeAttribute('hidden');
+        statusEl.textContent = `Đã tải: hiragana_${r}.gif`;
+      };
+      img.onerror = () => {
+        img.setAttribute('hidden','');
+        statusEl.textContent = `Không tìm thấy ${src}`;
+      };
 
-  const buttons = Array.from(document.querySelectorAll('button.k'));
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // highlight
-      buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed','true');
-      // load image
-      setImageForKana(btn.dataset.kana);
-    });
-  });
+      img.src = src + '?t=' + Date.now();
+      img.alt = `${kana} (${r}) stroke order`;
+    }
 
-  document.getElementById('clearBtn').addEventListener('click', () => {
-    img.setAttribute('hidden','');
-    img.removeAttribute('src');
-    img.alt = '';
-    statusEl.textContent = 'Đã clear.';
-    document.querySelectorAll('button.k.active').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    // Gắn listener cho các nút
+    if (buttons.length === 0) {
+      statusEl.textContent = 'Không tìm thấy nút kana trong DOM.';
+    } else {
+      statusEl.textContent = `Đã sẵn sàng (${buttons.length} nút).`;
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // highlight
+          buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed','true');
+          // load image
+          setImageForKana(btn.dataset.kana);
+        });
+      });
+    }
+
+    // Nút Clear
+    const clearBtn = document.getElementById('clearBtn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        img.setAttribute('hidden','');
+        img.removeAttribute('src');
+        img.alt = '';
+        statusEl.textContent = 'Đã clear.';
+        document.querySelectorAll('button.k.active').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+      });
+    }
   });
 </script>
   </main>
